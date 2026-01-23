@@ -32,7 +32,7 @@ the Bioconductor policies and whether the email provided is reachable.
 
 # Installation
 
-```{r,eval=FALSE}
+```{r install, eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -42,17 +42,17 @@ BiocManager::install("BiocMaintainerApp")
 
 # Loading the package 
 
-```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+```{r load, include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(BiocMaintainerApp)
 ```
 
 # Launching the Shiny Application
 
-```{r,eval=FALSE}
+```{r launch, eval=FALSE}
 BiocMaintainerShiny()
 ```
 
-```{r,echo=FALSE}
+```{r overviewpic, echo=FALSE}
 knitr::include_graphics("figures/BiocMaintainerShiny.png")
 ```
 
@@ -62,14 +62,14 @@ Columns can be filtered using the search box above the respective column. For
 example, you can search for a maintainer email to see the packages associated
 with that email
 
-```{r,echo=FALSE}
+```{r filterpic, echo=FALSE}
 knitr::include_graphics("figures/FilterEmail.png")
 ```
 
 The general search box can filter across all columns and be used solely or in
 addition to columns filters. For example adding a filter for `biocV`
 
-```{r,echo=FALSE}
+```{r searchpic, echo=FALSE}
 knitr::include_graphics("figures/FilterSearchBox.png")
 ```
 
@@ -84,7 +84,7 @@ The default columns shown are:
 Optional columns can be select from the selection box. The selection box can be
 hidden or shown using the sandwich icon.
 
-```{r,echo=FALSE}
+```{r optcolpic, echo=FALSE}
 knitr::include_graphics("figures/OptionalColumns.png")
 ```
 
@@ -116,6 +116,6 @@ bounced can be retrieved. This is used as potential diagnostic and resolution.
 
 # Session Info
 
-```{r}
+```{r sessioninfo}
 sessionInfo()
 ```
