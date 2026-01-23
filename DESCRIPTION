@@ -9,8 +9,9 @@ Description: This package allows interactive viewing of package maintainer
     verification emails to accept Bioconductor policies; this application also
     depicts maintainer status on opting in and if the email is deemed valid.
 License: Artistic-2.0
-Depends: R (>= 4.6.0), shiny
-Imports: jsonlite,
+Depends: R (>= 4.6.0)
+Imports: shiny,
+    jsonlite,
     DT,
     shinyjs,
     shinythemes

@@ -1,0 +1,167 @@
+---
+title: "BiocMaintainerQueries: R functions to query Bioconductor Maintainer Validation App"
+author: "BiocMaintainerApp Team"
+output:
+  BiocStyle::html_document:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{BiocMaintainerQueries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    cache = TRUE,
+    out.width = "100%"
+)
+```
+
+# Background
+
+This package is an accompaniment to the Bioconductor Maintainer
+Validation App. It displays a list of the currently active Bioconductor
+packages and their maintainers.  The Bioconductor Maintainer Validation App
+sends a reminder email to maintainers of Bioconductor policies and
+procedures. Maintainers are required to opt-in to the Bioconductor policies once
+a year. This vignette demonstrates convenient wrappers to the application api
+for common queries against the database. See also the BiocMaintainerShiny
+vignette for how to launch the accompanied shiny app.
+
+
+# Installation
+
+```{r install, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("BiocMaintainerApp")
+```
+
+
+# Loading the package 
+
+```{r load, include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(BiocMaintainerApp)
+```
+
+# Helper functions for common queries
+
+This package provides convenient R functions that wrap around the Bioconductor
+Maintainer Validation App API.
+
+## Retrieve Maintainer and Package Information
+
+There are three functions that return data.frames of maintainer information
+that include: name, package, email, consent_date, email_status,
+is_email_valid. These functions take either the package name, maintainer email,
+or maintainer name as argument:
+
+- getInfoByPackage
+- getInfoByEmail
+- getInfoByName
+
+```{r exampleFilter}
+
+## By package name
+getInfoByPackage("BiocFileCache")
+
+## By maintainer email
+tbl <- getInfoByEmail("maintainer@bioconductor.org")
+head(tbl)
+
+## By maintainer name
+## Then list packages associated
+tbl <- getInfoByName("Hervé Pagès")
+head(tbl$package)
+
+```
+There is also a function that takes an email and returns if it is valid or
+not. If it is not valid, it will also return a data.frame of additional
+information collected to try to indicate the resason for the failed
+delivery. The return value of this function is a list with argument 'valid' and
+optionally 'data'.
+
+- isEmailValid
+
+```{r isvalid}
+isEmailValid("maintainer@bioconductor.org")
+```
+
+## List Maintainer Emails
+
+There are four list functions to help retrieve emails that are not necessarily
+valid either because emails cannot be delivered to the email or the maintainer
+has not consented to Bioconductor policies in the last year.
+
+- listInvalid
+- listNeedsConsent
+- listAllBadEmails
+- listEmailsOnSuppressionList
+
+
+```{r listfunctions}
+## list invalid
+## maintainers that emails cannot be delivered and any information on failure
+## this is a data.frame
+tbl <- listInvalid()
+head(tbl)
+
+## list needs consent
+## maintainers have not consented to policies in the last year
+tbl <- listNeedsConsent()	 
+head(tbl)
+
+## list bad emails
+## combo: invalid and needs consent
+tbl <- listAllBadEmails()
+head(tbl)
+
+## list suppression list
+## emails that appear on aws suppression list and would not try to send
+## this is list. 'data' element contains a data.frame of name and email
+tbl <- listEmailsOnSuppressionList()
+head(tbl$data)
+```
+
+# Retreive Database
+
+If the prebuilt functions are not sufficient and you would like to perform your
+own analysis, there is a function to download the current version of the
+database.
+
+- get_maintainer_data
+
+```{r fulltable}
+
+all_data <- get_maintainer_data()
+tail(all_data)
+
+```
+
+The following provide brief descriptions of columns:
+
+- **package:** name of Bioconductor package
+- **name:** maintainers name
+- **email:** maintainers provided email in package DESCRIPTION
+- **consent_date:** last known consent date to Bioconductor policies
+- **email_status:** (Initialized, valid, suppressed, bounce, new)
+- **is_email_valid:** true/false if the email could be delivered
+- **last_verification_sent:** when was the last verification email sent
+
+The remaining columns are utilized if additional information when an email is
+bounced can be retrieved. This is used as potential diagnostic and resolution.
+
+- **bounce_type**
+- **bounce_subtype**
+- **smtp_status**
+- **diagnostic_code**
+
+
+# Session Info
+
+```{r sessioninfo}
+sessionInfo()
+```

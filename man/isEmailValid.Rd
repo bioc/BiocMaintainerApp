@@ -24,7 +24,7 @@ Retrieves if maintainer email is valid
 Retrieves if maintainer email is valid.
 }
 \examples{
-  tbl <- getInfoByEmail("maintainer@bioconductor.org")
+  tbl <- isEmailValid("maintainer@bioconductor.org")
 
 }
 \author{

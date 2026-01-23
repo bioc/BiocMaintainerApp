@@ -109,7 +109,7 @@ getInfoByEmail <- function(email){
 #' @author Lori Shepherd
 #' 
 #' @examples
-#'   tbl <- getInfoByEmail("maintainer@bioconductor.org")
+#'   tbl <- isEmailValid("maintainer@bioconductor.org")
 #'
 #' @export
 isEmailValid <- function(email){
