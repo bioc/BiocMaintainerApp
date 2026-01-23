@@ -1,15 +1,15 @@
 library(testthat)
 library(shiny)
 
+
 test_that("Server reactive outputs work correctly", {
 
     
     testServer(BiocMaintainerShiny(), {
 
-        expect_equal(input$show_cols, character(0))
+        expect_true(is.null(input$show_cols) || identical(input$show_cols, character(0)))
 
-        dt <- output$maintainers_table
-        table_data <- dt()
+        table_data <- data()      
         expect_true(all(c("package", "name", "email") %in% colnames(table_data)))
 
         optional_cols <- c(
@@ -24,13 +24,18 @@ test_that("Server reactive outputs work correctly", {
             "diagnostic_code"
         )
         hidden_cols <- setdiff(optional_cols, input$show_cols)
-        expect_true(all(!(hidden_cols %in% colnames(table_data)[1:length(hidden_cols)])))
-
+        visible_cols <- setdiff(colnames(table_data), hidden_cols)
+        expect_true(all(c("package", "name", "email") %in% visible_cols))
+        expect_true(all(!(hidden_cols %in% visible_cols)))
+        
         session$setInputs(show_cols = c("consent_date", "needs_consent",
                                         "email_status"))
-        table_data2 <- dt()
-        expect_true(all(c("consent_date", "needs_consent", "email_status") %in% colnames(table_data2)))
-        not_selected <- setdiff(optional_cols, input$show_cols)
-        expect_true(all(!(not_selected %in% colnames(table_data2))))
+        selected_cols <- input$show_cols
+        expect_equal(selected_cols, c("consent_date", "needs_consent", "email_status"))
+
+        hidden_cols <- setdiff(optional_cols, selected_cols)
+        visible_cols <- setdiff(colnames(table_data), hidden_cols)
+        expect_true(all(selected_cols %in% visible_cols))
+        expect_true(all(!(hidden_cols %in% visible_cols)))       
     })
 })

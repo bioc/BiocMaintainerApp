@@ -18,6 +18,7 @@
 #' @importFrom shiny fluidPage titlePanel navbarPage tabPanel sidebarLayout
 #' @importFrom shiny sidebarPanel mainPanel fluidRow column h1 h3 h4 p
 #' @importFrom shiny tags HTML actionLink icon checkboxGroupInput reactive observeEvent
+#' @importFrom shiny div shinyApp
 #' @importFrom shinyjs useShinyjs toggle
 #' @importFrom DT dataTableOutput renderDataTable datatable
 #' @importFrom shinythemes shinytheme
