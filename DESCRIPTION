@@ -1,7 +1,7 @@
-Package: BiocMaintainerShiny
+Package: BiocMaintainerApp
 Title: View Bioconductor Package Maintainer Information Interactively
 Version: 0.99.0
-Authors@R:  c(person("Lori", "Shepherd",
+Authors@R: c(person("Lori", "Shepherd",
       email = "lori.shepherd@roswellpark.org",
       role = c("aut", "cre")))
 Description: This package allows interactive viewing of package maintainer
@@ -14,11 +14,15 @@ Imports: jsonlite,
     DT,
     shinyjs,
     shinythemes
-Suggests: knitr,
-    BiocStyle
+Suggests: 
+    knitr,
+    BiocStyle,
+    testthat (>= 3.0.0)
 biocViews: Infrastructure, ShinyApps
 BugReports: https://github.com/lshep/BiocMaintainerApp/issues
 URL: https://github.com/lshep/BiocMaintainerApp
 Encoding: UTF-8
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Config/testthat/edition: 3

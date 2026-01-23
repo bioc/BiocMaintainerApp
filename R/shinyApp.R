@@ -15,8 +15,13 @@
 #'
 #' @return Displays shiny app in browser
 #'
-#' @import shiny jsonlite DT shinyjs shinythemes
-#'
+#' @importFrom shiny fluidPage titlePanel navbarPage tabPanel sidebarLayout
+#' @importFrom shiny sidebarPanel mainPanel fluidRow column h1 h3 h4 p
+#' @importFrom shiny tags HTML actionLink icon checkboxGroupInput reactive observeEvent
+#' @importFrom shinyjs useShinyjs toggle
+#' @importFrom DT dataTableOutput renderDataTable datatable
+#' @importFrom shinythemes shinytheme
+#' 
 #' @author Lori Shepherd
 #' 
 #' @examples
@@ -76,7 +81,7 @@ BiocMaintainerShiny <- function(...) {
                                         "smtp_status",
                                         "diagnostic_code"
                                     ),
-                                    selected = character(0)  # Default: none selected
+                                    selected = character(0)
                                 ),
                                 width = 3
                             )
@@ -112,23 +117,7 @@ BiocMaintainerShiny <- function(...) {
 
         
         data <- reactive({
-#            url <- "http://127.0.0.1:4567/download-maintainer-db"
-            url <- "https://pkgmaintainers.bioconductor.org/download-maintainer-db"
-            df <- jsonlite::fromJSON(url)
-
-            if ("is_email_valid" %in% names(df)) {
-                df$is_email_valid <- as.logical(df$is_email_valid)
-            }
-            
-            if ("consent_date" %in% names(df)) {
-                df$consent_date <- as.Date(df$consent_date)  # Ensure it's Date type
-                one_year_ago <- Sys.Date() - 365
-                df$needs_consent <- df$consent_date < one_year_ago
-            } else {
-                df$needs_consent <- NA  # Handle missing column gracefully
-            }
-            
-            df            
+            get_maintainer_data()
         })
         
         output$maintainers_table <- DT::renderDataTable({
