@@ -24,7 +24,7 @@ url_base <- "https://pkgmaintainers.bioconductor.org/"
 getInfoByPackage <- function(packageName){
     stopifnot(length(packageName)==1L, is.character(packageName))
     data_url <- paste0(url_base, "info/package/", packageName)
-    jsonlite::fromJSON(data_url)
+    as.data.frame(jsonlite::fromJSON(data_url))
 }
 
 #' @title Get Maintainer Information by Maintainer Name
@@ -54,7 +54,7 @@ getInfoByName <- function(name){
     stopifnot(length(name)==1L, is.character(name))
     name_enc <- utils::URLencode(name, reserved = TRUE)
     data_url <- paste0(url_base, "info/name/", name_enc)
-    jsonlite::fromJSON(data_url)
+    as.data.frame(jsonlite::fromJSON(data_url))
 }
 
 #' @title Get Maintainer Information by Maintainer Email
@@ -83,7 +83,7 @@ getInfoByEmail <- function(email){
     stopifnot(length(email)==1L, is.character(email))
     email_enc <- utils::URLencode(email, reserved = TRUE)
     data_url <- paste0(url_base, "info/email/", email_enc)
-    jsonlite::fromJSON(data_url)
+    as.data.frame(jsonlite::fromJSON(data_url))
 }
 
 #' @title Check if Maintainer Email is Valid
@@ -100,7 +100,8 @@ getInfoByEmail <- function(email){
 #' is FALSE, the list will also contain an attribute 'data' with additional
 #' diagnostic columns in the database. This includes: email, name, package,
 #' consent_date, email_status, is_email_valid, bounce_type, bounce_subtype,
-#' smtp_status, diagnostic_code.
+#' smtp_status, diagnostic_code. If no 'data' attribute is included, the email
+#' is not found in the database.
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils URLencode
@@ -129,7 +130,9 @@ isEmailValid <- function(email){
 #' @return data.frame of maintainer information for anyone with a currently
 #' identified invalid email. This includes: email, name, package,
 #' email_status, is_email_valid, bounce_type, bounce_subtype, smtp_status,
-#' diagnostic_code.
+#' diagnostic_code. An email is designated invalid if the validation email
+#' failed to send either for a bounce or because it is on the AWS suppression
+#' list.
 #'
 #' @importFrom jsonlite fromJSON
 #'
@@ -154,7 +157,7 @@ listInvalid <- function(){
 #' policies. Bioconductor requires maintainers consent to Bioconductor policies
 #' once a year. 
 #'
-#' @return single column matrix that lists all maintainer emails.
+#' @return character vector that lists all maintainer emails that need consent.
 #'
 #' @importFrom jsonlite fromJSON
 #'
@@ -166,7 +169,7 @@ listInvalid <- function(){
 #' @export
 listNeedsConsent <- function(){
     data_url <- paste0(url_base, "list/needs-consent")
-    jsonlite::fromJSON(data_url)
+    as.character(jsonlite::fromJSON(data_url))
 }
 
 #' @title List All 'Bad' Emails
@@ -175,9 +178,10 @@ listNeedsConsent <- function(){
 #'
 #' @description Retrieves all 'bad' emails.
 #' 
-#' @details Retrieves all 'bad' emails.
+#' @details Retrieves all 'bad' emails. A 'bad' email is either invalid or has
+#' not consented within the last year.
 #'
-#' @return single column matrix that lists all maintainer emails.
+#' @return character vector that lists all maintainer emails.
 #'
 #' @importFrom jsonlite fromJSON
 #'
@@ -189,7 +193,7 @@ listNeedsConsent <- function(){
 #' @export
 listAllBadEmails <- function(){
     data_url <- paste0(url_base, "list/bademails")
-    jsonlite::fromJSON(data_url)
+    as.character(jsonlite::fromJSON(data_url))
 }
 
 #' @title List All Emails on Suppression List

@@ -7,7 +7,7 @@
 listNeedsConsent()
 }
 \value{
-single column matrix that lists all maintainer emails.
+character vector that lists all maintainer emails that need consent.
 }
 \description{
 Retrieves all maintainers that need to consent to Bioconductor policies.

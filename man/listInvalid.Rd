@@ -10,7 +10,9 @@ listInvalid()
 data.frame of maintainer information for anyone with a currently
 identified invalid email. This includes: email, name, package,
 email_status, is_email_valid, bounce_type, bounce_subtype, smtp_status,
-diagnostic_code.
+diagnostic_code. An email is designated invalid if the validation email
+failed to send either for a bounce or because it is on the AWS suppression
+list.
 }
 \description{
 Retrieves all invalid emails

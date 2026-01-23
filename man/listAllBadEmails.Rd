@@ -7,13 +7,14 @@
 listAllBadEmails()
 }
 \value{
-single column matrix that lists all maintainer emails.
+character vector that lists all maintainer emails.
 }
 \description{
 Retrieves all 'bad' emails.
 }
 \details{
-Retrieves all 'bad' emails.
+Retrieves all 'bad' emails. A 'bad' email is either invalid or has
+not consented within the last year.
 }
 \examples{
   tbl <- listAllBadEmails()

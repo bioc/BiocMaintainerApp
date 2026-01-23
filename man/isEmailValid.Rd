@@ -14,7 +14,8 @@ list. All lists have attribute 'valid' which is TRUE/FALSE. If valid
 is FALSE, the list will also contain an attribute 'data' with additional
 diagnostic columns in the database. This includes: email, name, package,
 consent_date, email_status, is_email_valid, bounce_type, bounce_subtype,
-smtp_status, diagnostic_code.
+smtp_status, diagnostic_code. If no 'data' attribute is included, the email
+is not found in the database.
 }
 \description{
 Retrieves if maintainer email is valid
