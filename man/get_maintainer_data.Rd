@@ -9,7 +9,7 @@ get_maintainer_data(
 )
 }
 \arguments{
-\item{url}{Url to retrieve data from}
+\item{url}{Url to retrieve data from whose data can be parsed with jsonlite::fromJSON}
 }
 \value{
 data.frame of maintainer information

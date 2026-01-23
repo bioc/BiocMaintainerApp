@@ -1,22 +1,55 @@
 url_base <- "https://pkgmaintainers.bioconductor.org/"
 
-
-## get '/info/package/:pkg' do
-##   content_type :json
-##   return Core.get_package_info(params[:pkg])
-## end
-
+#' @title Get Maintainer Information by Package Name
+#'
+#' @aliases getInfoByPackage
+#'
+#' @description Retrieves maintainer information by package name
+#'
+#' @details Retrieves maintainer information by package name
+#'
+#' @param packageName current Bioconductor package
+#'
+#' @return data.frame of maintainer information including name, package, email,
+#' consent_date, email_status, is_email_valid
+#'
+#' @importFrom jsonlite fromJSON
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- getInfoByPackage("BiocFileCache")
+#'
+#' @export
 getInfoByPackage <- function(packageName){
     stopifnot(length(packageName)==1L, is.character(packageName))
     data_url <- paste0(url_base, "info/package/", packageName)
     jsonlite::fromJSON(data_url)
 }
 
-## get %r{/info/name/(.+)} do |name|
-##   content_type :json
-##   return Core.get_name_info(name)
-## end
-
+#' @title Get Maintainer Information by Maintainer Name
+#'
+#' @aliases getInfoByName
+#'
+#' @description Retrieves maintainer information by maintainer name
+#'
+#' @details Retrieves maintainer information by maintainer name
+#'
+#' @param name current Bioconductor package maintainer name
+#'
+#' @return data.frame of maintainer information including name, package, email,
+#' consent_date, email_status, is_email_valid
+#'
+#' @importFrom jsonlite fromJSON
+#' @importFrom utils URLencode
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- getInfoByName("Lori Shepherd")
+#'   tbl <- getInfoByName("Hervé Pagès")
+#'
+#' @export
 getInfoByName <- function(name){
     stopifnot(length(name)==1L, is.character(name))
     name_enc <- utils::URLencode(name, reserved = TRUE)
@@ -24,11 +57,28 @@ getInfoByName <- function(name){
     jsonlite::fromJSON(data_url)
 }
 
-## get '/info/email/:email' do
-##   content_type :json
-##   return Core.get_email_info(params[:email])
-## end
-
+#' @title Get Maintainer Information by Maintainer Email
+#'
+#' @aliases getInfoByEmail
+#'
+#' @description Retrieves maintainer information by maintainer email
+#'
+#' @details Retrieves maintainer information by maintainer email
+#'
+#' @param email current Bioconductor package maintainer email
+#'
+#' @return data.frame of maintainer information including name, package, email,
+#' consent_date, email_status, is_email_valid
+#'
+#' @importFrom jsonlite fromJSON
+#' @importFrom utils URLencode
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- getInfoByEmail("maintainer@bioconductor.org")
+#'
+#' @export
 getInfoByEmail <- function(email){
     stopifnot(length(email)==1L, is.character(email))
     email_enc <- utils::URLencode(email, reserved = TRUE)
@@ -36,11 +86,31 @@ getInfoByEmail <- function(email){
     jsonlite::fromJSON(data_url)
 }
 
-## get '/info/valid/:email' do
-##   content_type :json
-##   return Core.is_email_valid(params[:email])
-## end
-
+#' @title Check if Maintainer Email is Valid
+#'
+#' @aliases isEmailValid
+#'
+#' @description Retrieves if maintainer email is valid
+#' 
+#' @details Retrieves if maintainer email is valid. 
+#'
+#' @param email current Bioconductor package maintainer email
+#'
+#' @return list. All lists have attribute 'valid' which is TRUE/FALSE. If valid
+#' is FALSE, the list will also contain an attribute 'data' with additional
+#' diagnostic columns in the database. This includes: email, name, package,
+#' consent_date, email_status, is_email_valid, bounce_type, bounce_subtype,
+#' smtp_status, diagnostic_code.
+#'
+#' @importFrom jsonlite fromJSON
+#' @importFrom utils URLencode
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- getInfoByEmail("maintainer@bioconductor.org")
+#'
+#' @export
 isEmailValid <- function(email){
     stopifnot(length(email)==1L, is.character(email))
     email_enc <- utils::URLencode(email, reserved = TRUE)
@@ -48,44 +118,100 @@ isEmailValid <- function(email){
     jsonlite::fromJSON(data_url)
 }
 
-## get '/list/invalid/?' do
-##   content_type :json
-##   return Core.list_invalid()
-## end
-
-
-listInValid <- function(){
+#' @title List All Invalid Emails 
+#'
+#' @aliases listInvalid
+#'
+#' @description Retrieves all invalid emails
+#' 
+#' @details Retrieves all invalid emails 
+#'
+#' @return data.frame of maintainer information for anyone with a currently
+#' identified invalid email. This includes: email, name, package,
+#' email_status, is_email_valid, bounce_type, bounce_subtype, smtp_status,
+#' diagnostic_code.
+#'
+#' @importFrom jsonlite fromJSON
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- listInvalid()
+#'
+#' @export
+listInvalid <- function(){
     data_url <- paste0(url_base, "list/invalid")
     jsonlite::fromJSON(data_url)
 }
 
-
-## get '/list/needs-consent/?' do
-##   content_type :json
-##   return Core.list_needs_consent()
-## end
-
+#' @title List All Maintainer that Need Consent
+#'
+#' @aliases listNeedsConsent
+#'
+#' @description Retrieves all maintainers that need to consent to Bioconductor policies.
+#' 
+#' @details Retrieves all maintainers that need to consent to Bioconductor
+#' policies. Bioconductor requires maintainers consent to Bioconductor policies
+#' once a year. 
+#'
+#' @return single column matrix that lists all maintainer emails.
+#'
+#' @importFrom jsonlite fromJSON
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- listNeedsConsent()
+#'
+#' @export
 listNeedsConsent <- function(){
     data_url <- paste0(url_base, "list/needs-consent")
     jsonlite::fromJSON(data_url)
 }
 
-## get '/list/bademails/?' do
-##   content_type :json
-##   return Core.list_bad_emails()
-## end
-
+#' @title List All 'Bad' Emails
+#'
+#' @aliases listAllBadEmails
+#'
+#' @description Retrieves all 'bad' emails.
+#' 
+#' @details Retrieves all 'bad' emails.
+#'
+#' @return single column matrix that lists all maintainer emails.
+#'
+#' @importFrom jsonlite fromJSON
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- listAllBadEmails()
+#'
+#' @export
 listAllBadEmails <- function(){
     data_url <- paste0(url_base, "list/bademails")
     jsonlite::fromJSON(data_url)
 }
 
-## get '/list/suppressionList/?' do
-##   content_type :json
-##   return Core.list_suppression_list()
-## end
-
-listEmailsOnAWSsuppression <- function(){
+#' @title List All Emails on Suppression List
+#'
+#' @aliases listEmailsOnSuppressionList
+#'
+#' @description Retrieves all emails on AWS Suppression List
+#' 
+#' @details Retrieves all emails on AWS Suppression List
+#'
+#' @return list. First attribute is 'awssuppression' which is TRUE. Second
+#' attribute is 'data' which is a data.frame that includes the email and name.
+#'
+#' @importFrom jsonlite fromJSON
+#'
+#' @author Lori Shepherd
+#' 
+#' @examples
+#'   tbl <- listEmailsOnSuppressionList()
+#'
+#' @export
+listEmailsOnSuppressionList <- function(){
     data_url <- paste0(url_base, "list/suppressionList")
     jsonlite::fromJSON(data_url)
 }

@@ -23,7 +23,7 @@
 get_maintainer_data <- function(url =
                                     "https://pkgmaintainers.bioconductor.org/download-maintainer-db"){
 
-    stopfifnot(length(url)==1L)
+    stopifnot(length(url)==1L)
                
     df <- jsonlite::fromJSON(url)
     
