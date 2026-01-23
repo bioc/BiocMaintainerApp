@@ -8,7 +8,7 @@
 #' @details Retrieves maintainer information from the package maintainer
 #' validation app
 #'
-#' @param url Url to retrieve data from
+#' @param url Url to retrieve data from whose data can be parsed with jsonlite::fromJSON
 #'
 #' @return data.frame of maintainer information
 #'
@@ -22,6 +22,9 @@
 #' @export
 get_maintainer_data <- function(url =
                                     "https://pkgmaintainers.bioconductor.org/download-maintainer-db"){
+
+    stopfifnot(length(url)==1L)
+               
     df <- jsonlite::fromJSON(url)
     
     if ("is_email_valid" %in% names(df)) {
