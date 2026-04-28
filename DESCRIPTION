@@ -1,6 +1,6 @@
 Package: BiocMaintainerApp
 Title: View Bioconductor Package Maintainer Information Interactively
-Version: 0.99.0
+Version: 1.0.0
 Authors@R: c(person("Lori", "Shepherd",
       email = "lori.shepherd@roswellpark.org",
       role = c("aut", "cre")))
